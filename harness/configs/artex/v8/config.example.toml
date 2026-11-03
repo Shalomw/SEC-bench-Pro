@@ -1,0 +1,28 @@
+# ARTEX on SEC-bench Pro — V8 example.
+#
+# Run from the repository root:
+#   ARTEX_LLM_API_KEY=... ARTEX_LLM_BASE_URL=... ARTEX_LLM_MODEL=... \
+#   ARTEX_ZIP_PATH=/tmp/artex-fork-linux-amd64.zip \
+#   uv run harness/eval_artex.py harness/configs/artex/v8/config.example.toml
+
+model = "deepseek-flash[1m]"
+provider = "anthropic"
+outdir = "output/v8/artex/example"
+project = "v8"
+
+# One instance first; expand after the smoke passes.
+instances = ["472139305"]
+
+timeout = 5400
+prompt_template = "../prompts/baseline/task_prompt_v8.j2"
+images_dir = "../projects/v8"
+
+# Host path of the linux-amd64 ARTEX zip. ARTEX_ZIP_PATH overrides this.
+artex_zip = "/tmp/artex-fork-linux-amd64.zip"
+worker_count = 2
+privileged = false
+
+# Smoke/bootstrap only: start a worker immediately with the full source-audit
+# goal, bypassing the web-oriented planner's first round.
+# Leave false for the real source-audit profile once P1.5 lands.
+seed_first_intent = false
