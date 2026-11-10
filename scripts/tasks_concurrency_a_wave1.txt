@@ -1,0 +1,7 @@
+# wave 1: overlap controls + race core + sm
+v8 385775375
+v8 443182220
+v8 447307165
+v8 390201806
+v8 394635429
+sm 2011069
