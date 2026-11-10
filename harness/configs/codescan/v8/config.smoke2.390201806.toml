@@ -1,0 +1,34 @@
+# CodeScan-Artex (SCA) smoke 2 — full src + findings-only prompt.
+#
+# Run from the repository root:
+#   set -a; source ~/Projects/egrun/.secrets/env; set +a
+#   .venv/bin/python harness/eval_codescan.py --no-tui \
+#       harness/configs/codescan/v8/config.smoke2.390201806.toml
+#
+# Success criterion: codescan_findings.json is produced and non-empty.
+# Dedicated container prefix keeps this run isolated from ARTEX and from the
+# first smoke (codescan-smoke-*).
+
+model = "deepseek-flash[1m]"
+provider = "anthropic"
+outdir = "output/v8/codescan/smoke2_390201806"
+project = "v8"
+
+instances = ["390201806"]
+
+timeout = 2400
+prompt_template = "../prompts/codescan/findings_only.j2"
+images_dir = "../projects/v8"
+
+# Audit the full V8 src tree (repo-relative to work_dir=/src/v8); config
+# overrides meta.json's target_subdir so workers can close data flows through
+# src/wasm, src/heap, src/builtins, etc.
+source_entries = ["src"]
+
+sca_bin = "~/Projects/egrun/codescan/artex"
+codescan_skills = "~/Projects/egrun/codescan/codescan-skills.tgz"
+port = 7878
+worker_count = 2
+
+pull_missing = false
+container_prefix = "codescan-smoke2"

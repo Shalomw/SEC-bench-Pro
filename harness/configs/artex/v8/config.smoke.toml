@@ -1,0 +1,20 @@
+# ARTEX on SEC-bench Pro — reproducibility smoke (not the final planner path).
+#
+# Same instance and same seed_first_intent=true as the first verified run.
+# The example config keeps seed_first_intent=false for the planned P1.5 path.
+
+model = "deepseek-flash[1m]"
+provider = "anthropic"
+outdir = "output/v8/artex/smoke2"
+project = "v8"
+
+instances = ["472139305"]
+
+timeout = 3600
+prompt_template = "../prompts/baseline/task_prompt_v8.j2"
+images_dir = "../projects/v8"
+
+artex_zip = "/tmp/artex-fork-linux-amd64.zip"
+worker_count = 2
+privileged = false
+seed_first_intent = true

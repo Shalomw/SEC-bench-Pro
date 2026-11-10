@@ -1,0 +1,32 @@
+# CodeScan-Artex (SCA) on SEC-bench Pro — SpiderMonkey concurrency A.
+#
+# Run from the repository root:
+#   set -a; source ~/Projects/egrun/.secrets/env; set +a
+#   .venv/bin/python harness/eval_codescan.py --no-tui \
+#       harness/configs/codescan/sm/config.concurrency.toml
+#
+# Findings-only static audit: no PoC, no binary execution. The audit scope is
+# js/src (repo-relative to work_dir=/src/gecko-dev), overriding meta.json
+# target_subdir so data flows can reach js/src/vm, js/src/jit, js/src/gc, etc.
+
+model = "deepseek-flash[1m]"
+provider = "anthropic"
+outdir = "output/sm/codescan/concurrency_a"
+project = "sm"
+
+instances = ["2011069"]
+
+timeout = 5400
+prompt_template = "../prompts/codescan/findings_only.j2"
+images_dir = "../projects/sm"
+source_entries = ["js/src"]
+
+# SCA engine (host paths; ~ is expanded).
+sca_bin = "~/Projects/egrun/codescan/artex"
+codescan_skills = "~/Projects/egrun/codescan/codescan-skills.tgz"
+port = 7878
+worker_count = 2
+
+# Never pull missing images implicitly; prefetch them explicitly.
+pull_missing = false
+# container_prefix = "codescan-eval"

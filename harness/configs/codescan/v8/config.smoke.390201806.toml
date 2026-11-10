@@ -1,0 +1,29 @@
+# CodeScan-Artex (SCA) smoke — one locally prefetched V8 image, 40 min budget.
+#
+# Run from the repository root:
+#   set -a; source ~/Projects/egrun/.secrets/env; set +a
+#   .venv/bin/python harness/eval_codescan.py --no-tui \
+#       harness/configs/codescan/v8/config.smoke.390201806.toml
+#
+# Success criterion: codescan_findings.json is produced and non-empty.
+# Dedicated container prefix keeps the smoke container isolated from the
+# ARTEX concurrency runs (codescan-smoke-*).
+
+model = "deepseek-flash[1m]"
+provider = "anthropic"
+outdir = "output/v8/codescan/smoke_390201806"
+project = "v8"
+
+instances = ["390201806"]
+
+timeout = 2400
+prompt_template = "../prompts/baseline/task_prompt_v8.j2"
+images_dir = "../projects/v8"
+
+sca_bin = "~/Projects/egrun/codescan/artex"
+codescan_skills = "~/Projects/egrun/codescan/codescan-skills.tgz"
+port = 7878
+worker_count = 2
+
+pull_missing = false
+container_prefix = "codescan-smoke"

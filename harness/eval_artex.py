@@ -201,7 +201,16 @@ def run_instance(
     info(f"Work dir: {work_dir}")
     if _run(["docker", "image", "inspect", image_name], timeout=60).returncode != 0:
         info(f"Pulling Docker image: {image_name}")
-        if _run(["docker", "pull", image_name], timeout=3600).returncode != 0:
+        pulled = False
+        for attempt in range(1, 7):
+            pull = _run(["docker", "pull", image_name], timeout=43200)
+            if pull.returncode == 0:
+                pulled = True
+                break
+            warn(f"docker pull failed (attempt {attempt}/6): {pull.stderr.strip()[-300:]}")
+            if attempt < 6:
+                time.sleep(60)
+        if not pulled:
             error(f"docker pull failed: {image_name}")
             return 1
 
